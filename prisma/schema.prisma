@@ -1,22 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// my-portfolio-backend/prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // Keep the output if you want to store generated client outside node_modules
+  // But generally, for standard setups, it's not needed and can cause issues if misconfigured.
+  // Let's remove it for simplicity to prevent any potential pathing conflicts with Render's build.
+  // If you want to keep it, make sure your server.js imports from the correct path.
+  // For standard setup, Prisma client is usually in node_modules/@prisma/client
+  // output   = "../generated/prisma" // CONSIDER REMOVING THIS LINE
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db" // यहाँ बदलाव किया गया है
+  provider = "postgresql" // <--- CHANGE THIS BACK TO postgresql
+  url      = env("DATABASE_URL") // <--- This is correct for reading from environment variables
 }
-  model Message {
-    id        String    @id @default(uuid()) // Unique ID for each message
-    name      String
-    email     String
-    message   String
-    createdAt DateTime  @default(now()) // Timestamp when the message was received
-  }
+
+model Message {
+  id        String    @id @default(uuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime  @default(now())
+}
